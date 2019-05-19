@@ -55,3 +55,56 @@
 >```cpp
 >this->opcClient->connectToHost(tr("172.31.1.147"), 8081);
 >```  
+>从控制柜接收数据是为了获取当前机械臂末端位置，并初始化程序原点坐标。接收数据的处理由void LaserTrackQt::robotReceivedEvent()执行。  
+>处理完激光传感器数据后，需要向控制柜发送控制信号控制机械臂运动。由于激光条纹与焊枪尖端存在一定距离，控制上属于超前控制，本系统采用缓冲队列来解决超前
+控制问题。  
+>```cpp
+>std::deque<iterpos> ipos;
+>this->ipos.resize(this->bufferLength);
+>```  
+>工控机向控制柜发送控制信号的周期为90ms，并将坐标数据与队列第一位数据相加发送给控制柜。
+>以下为周期控制和缓冲队列数据的进出：  
+>```cpp
+>this->rearTime = GetTickCount();
+>	if ((this->rearTime - this->frontTime) > 90)
+>	{
+>		this->ipos.push_back(iterpos(x, y, z));
+>		if (this->ipos.size() == 1)
+>		{
+>			this->ipos.resize(this->bufferLength);
+>			for (int i = 1; i < this->ipos.size(); i++)
+>			{
+>				ipos[i].dx = ipos[0].dx;
+>				ipos[i].dy = ipos[0].dy;
+>				ipos[i].dz = ipos[0].dz;
+>			}
+>		}
+>		this->ipos.pop_front();
+>		this->frontTime = this->rearTime;
+>		this->robotRun();
+>	}
+>```  
+以下为向控制柜发送控制信号：  
+>```cpp
+>void LaserTrackQt::robotRun()
+>{
+>	if (this->isRobotConnected == true && this->isRobotRun == true)
+>	{
+>		iterpos tmpos;
+>		tmpos.dx = ipos[0].dx;
+>		tmpos.dy = 0.025 * ipos[0].dy;
+>		tmpos.dz = ipos[0].dz;
+>		this->dy = -(float)(this->velocity / 10 * tmpos.dy / sqrt(tmpos.dy*tmpos.dy + tmpos.dx*tmpos.dx));
+>		float step = this->velocity / 10;
+>		this->dx = sqrtf(step*step - this->dy*this->dy);
+>		posX += dx;
+>		posY += dy;
+>		std::string content = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope >xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" >xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns=\"http://opcfoundation.org/webservices/XMLDA/1.0/\"><soap:Body><Write >ReturnValuesOnReply=\"false\"><Options/><ItemList><Items ItemPath=\"\" ItemName=\"RobotVar.KUKAX\"><Value xsi:type=\"xsd:float\">" + >std::to_string(posX) + "</Value></Items><Items ItemPath=\"\" ItemName=\"RobotVar.KUKAY\"><Value xsi:type=\"xsd:float\">" + >std::to_string(posY) + "</Value></Items><Items ItemPath=\"\" ItemName=\"RobotVar.KUKAZ\"><Value xsi:type=\"xsd:float\">" + >std::to_string(posZ) + "</Value></Items><Items ItemPath=\"\" ItemName=\"RobotVar.KUKAVEL\"><Value xsi:type=\"xsd:float\">" + >std::to_string(this->velocity) + "</Value></Items></ItemList></Write></soap:Body></soap:Envelope>";
+>		std::string enter = "\r\n\r\n";
+>		std::string head = "POST /DA HTTP/1.1\r\nUser-Agent: Softing OPC Toolbox\r\nHost: 172.31.1.147:8081\r\nDate: Thu, 6 Apr 2017 >01:47:57 GMT\r\nConnection: Keep-Alive\r\nSOAPAction: \"http://opcfoundation.org/webservices/XMLDA/1.0/Write\"\r\nContent-Type: ??>text/xml; charset=utf-8\r\nContent-Length: ";
+>		std::string write = head + std::to_string(content.size()) + enter + content;
+>		QString sendData = tr(write.c_str());
+>		this->opcClient->write(sendData.toUtf8().data());
+>	}
+>}
+>```  
