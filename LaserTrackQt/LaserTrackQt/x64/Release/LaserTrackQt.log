@@ -1,0 +1,21 @@
+﻿生成启动时间为 2019/5/19 20:56:45。
+     1>项目“D:\Projects\LaserTrackQt\LaserTrackQt\LaserTrackQt.vcxproj”在节点 2 上(Build 个目标)。
+     1>QtFinalize:
+         Moc'ing LaserTrackQt.h...
+       ClCompile:
+         D:\VisualStudio2013\VC\bin\x86_amd64\CL.exe /c /I.\GeneratedFiles /I. /ID:\INCLUDE\QT5.8.0\5.8\msvc2013_64\include /I.\GeneratedFiles\Release /ID:\INCLUDE\QT5.8.0\5.8\msvc2013_64\include\QtCore /ID:\INCLUDE\QT5.8.0\5.8\msvc2013_64\include\QtGui /ID:\INCLUDE\QT5.8.0\5.8\msvc2013_64\include\QtANGLE /ID:\INCLUDE\QT5.8.0\5.8\msvc2013_64\include\QtNetwork /ID:\INCLUDE\QT5.8.0\5.8\msvc2013_64\include\QtWidgets /nologo /W1 /WX- /MP /O2 /D UNICODE /D WIN32 /D WIN64 /D QT_DLL /D QT_NO_DEBUG /D NDEBUG /D QT_CORE_LIB /D QT_GUI_LIB /D QT_NETWORK_LIB /D QT_WIDGETS_LIB /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt LaserTrackQt.cpp main.cpp .\GeneratedFiles\Release\moc_LaserTrackQt.cpp .\GeneratedFiles\qrc_LaserTrackQt.cpp
+         LaserTrackQt.cpp
+         main.cpp
+         moc_LaserTrackQt.cpp
+         qrc_LaserTrackQt.cpp
+       Link:
+         D:\VisualStudio2013\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Projects\LaserTrackQt\x64\Release\\LaserTrackQt.exe" /NOLOGO /LIBPATH:D:\INCLUDE\QT5.8.0\5.8\msvc2013_64\lib qtmain.lib Qt5Core.lib Qt5Gui.lib Qt5Network.lib Qt5Widgets.lib opencv_world310.lib libjpeg.lib NITLibrary.lib WS2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:"D:\Projects\LaserTrackQt\x64\Release\LaserTrackQt.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Projects\LaserTrackQt\x64\Release\LaserTrackQt.lib" /MACHINE:X64 x64\Release\LaserTrackQt.obj
+         x64\Release\main.obj
+         x64\Release\moc_LaserTrackQt.obj
+         x64\Release\qrc_LaserTrackQt.obj
+         LaserTrackQt.vcxproj -> D:\Projects\LaserTrackQt\x64\Release\LaserTrackQt.exe
+     1>已完成生成项目“D:\Projects\LaserTrackQt\LaserTrackQt\LaserTrackQt.vcxproj”(Build 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:03.83
