@@ -45,8 +45,13 @@
   
 ### 1.2 与机器人控制柜的通讯
 >机器人控制柜内置基于OPC标准的以太网通讯方式，用户可以根据OPC标准向KRC4控制柜发送和接收数据。  
->OPC标准有多种具体的实现形式，本系统采用OPC-Xml方式与控制柜进行通讯。OPC-Xml是以TCP协议为基础进行通讯的，因此，在具体实现上，需要实例化QTcpSocket类，
-并监听本地IP和端口。KRC4的IP为172.31.1.147，端口随意。  
+>OPC标准有多种具体的实现形式，本系统采用OPC-Xml方式与控制柜进行通讯。OPC-Xml是以TCP协议为基础进行通讯的，因此，在具体实现上，需要实例化QTcpSocket类，并监听本地IP和端口。KRC4的IP为172.31.1.147，端口随意。 
+连接成功事件和接收到数据事件。
+>```cpp
+>QObject::connect(this->opcClient, &QTcpSocket::connected, this, &LaserTrackQt::robotConnectedEvent);
+>QObject::connect(this->opcClient, &QTcpSocket::readyRead, this, &LaserTrackQt::robotReceivedEvent);
+>```  
+>监听地址与端口。  
 >```cpp
 >this->opcClient->connectToHost(tr("172.31.1.147"), 8081);
 >```  
